@@ -1,0 +1,16 @@
+java-search-engine
+│
+├── crawler
+│   └── WebCrawler.java
+│
+├── parser
+│   └── HtmlParser.java
+│
+├── indexer
+│   └── InvertedIndex.java
+│
+├── search
+│   └── SearchEngine.java
+│
+└── app
+    └── Main.java
