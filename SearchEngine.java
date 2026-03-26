@@ -16,24 +16,28 @@ public class SearchEngine {
 
         String[] words = query.toLowerCase().split("\\s+");
 
-        Set<String> results = new HashSet<>();
+        Map<String, Integer> scores = new HashMap<>();
 
         for (String word : words) {
 
-            Set<String> urls = index.search(word);
+            Map<String, Integer> results = index.search(word);
 
-            if (results.isEmpty()) {
-                results.addAll(urls);
-            } else {
-                results.retainAll(urls); // AND logic
+            for (String url : results.keySet()) {
+                scores.put(url, scores.getOrDefault(url, 0) + results.get(url));
             }
         }
 
-        if (results.isEmpty()) {
+        List<Map.Entry<String, Integer>> ranked = new ArrayList<>(scores.entrySet());
+
+        ranked.sort((a, b) -> b.getValue() - a.getValue());
+
+        if (ranked.isEmpty()) {
             System.out.println("No results found.");
         } else {
-            System.out.println("Results:");
-            results.forEach(System.out::println);
+            System.out.println("Top Results:");
+            for (Map.Entry<String, Integer> entry : ranked) {
+                System.out.println(entry.getKey() + " (score: " + entry.getValue() + ")");
+            }
         }
     }
 }
